@@ -1,18 +1,16 @@
 package me.kingtux.secondend;
 
+import com.onarandombox.MultiverseCore.MVWorld;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldType;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +25,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     @Override
     public void onEnable() {
         try {
-            multiverseCore = getMultiverseCore();
+            multiverseCore = getMVCoreInstance();
         } catch (UnknownDependencyException e) {
             e.printStackTrace();
             Bukkit.getPluginManager().disablePlugin(this);
@@ -35,7 +33,10 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         saveDefaultConfig();
         loadPlugin();
         // Plugin startup logic
-        Bukkit.getPluginCommand("secondend").setExecutor(this);
+        SecondEndCommand endCommand = new SecondEndCommand(this);
+
+        Bukkit.getPluginCommand("secondend").setExecutor(endCommand);
+        Bukkit.getPluginCommand("secondend").setTabCompleter(endCommand);
     }
 
     private void loadPlugin() {
@@ -56,7 +57,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         // Plugin shutdown logic
     }
 
-    public MultiverseCore getMultiverseCore() {
+    public MultiverseCore getMVCoreInstance() {
         Plugin plugin = getServer().getPluginManager().getPlugin("Multiverse-Core");
 
         if (plugin instanceof MultiverseCore) {
@@ -65,15 +66,6 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         throw new UnknownDependencyException("Multiverse-Core");
     }
 
-    @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if (!sender.hasPermission("secondend.reset")) {
-            sender.sendMessage("You lack the permission to do that.");
-            return false;
-        }
-        run();
-        return true;
-    }
 
     @Override
     public void run() {
@@ -95,5 +87,15 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
             endSeed = String.valueOf(random.nextLong());
         }
         multiverseCore.getMVWorldManager().addWorld(endName, World.Environment.THE_END, endSeed, WorldType.NORMAL, true, null);
+    }
+
+    public MultiverseCore getMultiverseCore() {
+        return multiverseCore;
+    }
+
+    public MultiverseWorld getSecondEndWorld() {
+        String endName = getConfig().getString("end-name");
+        Optional<MultiverseWorld> first = multiverseCore.getMVWorldManager().getMVWorlds().stream().filter(multiverseWorld -> multiverseWorld.getName().equals(endName)).findFirst();
+        return first.get();
     }
 }

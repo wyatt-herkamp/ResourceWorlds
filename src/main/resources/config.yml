@@ -4,3 +4,5 @@ end-name: "end_two"
 end-seed: ""
 #Where do we send the players if they are in the second_end during a reset
 return-world: "world"
+
+require-portal-achievement: false
