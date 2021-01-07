@@ -7,19 +7,19 @@ import org.bukkit.ChatColor;
 
 public enum SELang implements EnumConfig {
     @ConfigEntry
-    MISSING_PERMISSION(""),
+    MISSING_PERMISSION("You lack the permission to do that"),
     @ConfigEntry
-    MUST_BE_PLAYER(""),
+    MUST_BE_PLAYER("You must be a player"),
     @ConfigEntry
-    RESETTING_END_ANNOUNCEMENT(""),
+    RESETTING_END_ANNOUNCEMENT("Resetting the end"),
     @ConfigEntry
-    TELEPORT_TO_END(""),
+    TELEPORT_TO_END("Teleported you to the end"),
     @ConfigEntry
-    RESETTING_END(""),
+    RESETTING_END("Forcing a end reset"),
     @ConfigEntry
-    RELOADING_PLUGIN(""),
+    RELOADING_PLUGIN("Reloading the plugin"),
     @ConfigEntry
-    MUST_OF_ENTERED_PORTAL("");
+    MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal");
 
     @ConfigValue
     private String value;
