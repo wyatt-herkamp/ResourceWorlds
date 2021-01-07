@@ -1,8 +1,10 @@
 # In Seconds
 reset-time: 86400
+#Second End Name
 end-name: "end_two"
+#End Seed. Blank = Random Every time
 end-seed: ""
 #Where do we send the players if they are in the second_end during a reset
 return-world: "world"
-
+# Requires the player to already of found and entered the end portal found in the world.
 require-portal-achievement: false

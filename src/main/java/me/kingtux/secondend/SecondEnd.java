@@ -3,15 +3,19 @@ package me.kingtux.secondend;
 import com.onarandombox.MultiverseCore.MVWorld;
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
+import me.kingtux.enumconfig.BukkitYamlHandler;
+import me.kingtux.enumconfig.EnumConfigLoader;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldType;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -21,6 +25,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     private MultiverseCore multiverseCore;
     private Random random = new Random();
     private int task;
+    private BukkitYamlHandler yamlHandler;
 
     @Override
     public void onEnable() {
@@ -32,7 +37,6 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         }
         saveDefaultConfig();
         loadPlugin();
-        // Plugin startup logic
         SecondEndCommand endCommand = new SecondEndCommand(this);
 
         Bukkit.getPluginCommand("secondend").setExecutor(endCommand);
@@ -40,21 +44,23 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     }
 
     private void loadPlugin() {
+        reloadConfig();
         task = Bukkit.getScheduler().runTaskTimer(this, this, 0, getConfig().getInt("reset-time") * 20).getTaskId();
+        yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
+        EnumConfigLoader.loadLang(yamlHandler, SELang.class, true);
     }
 
     private void closePlugin() {
         Bukkit.getScheduler().cancelTask(task);
+        String endName = getConfig().getString("end-name");
+
+        multiverseCore.getMVWorldManager().deleteWorld(endName);
+
     }
 
     @Override
     public void onDisable() {
         closePlugin();
-        String endName = getConfig().getString("end-name");
-
-        multiverseCore.getMVWorldManager().deleteWorld(endName);
-
-        // Plugin shutdown logic
     }
 
     public MultiverseCore getMVCoreInstance() {
@@ -66,14 +72,13 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         throw new UnknownDependencyException("Multiverse-Core");
     }
 
-
     @Override
     public void run() {
         String endName = getConfig().getString("end-name");
         Optional<MultiverseWorld> first = multiverseCore.getMVWorldManager().getMVWorlds().stream().filter(multiverseWorld -> multiverseWorld.getName().equals(endName)).findFirst();
         if (first.isPresent()) {
             MultiverseWorld multiverseWorld = first.get();
-            Bukkit.broadcastMessage("Resetting End!");
+            Bukkit.broadcastMessage(SELang.RESETTING_END_ANNOUNCEMENT.color());
             List<Player> playerList = Bukkit.getOnlinePlayers().stream().filter(onlinePlayer -> onlinePlayer.getWorld() == multiverseWorld.getCBWorld()).collect(Collectors.toList());
             for (Player player : playerList) {
                 Location returnWorld = Bukkit.getWorld(getConfig().getString("return-world", "world")).getSpawnLocation();
@@ -97,5 +102,10 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         String endName = getConfig().getString("end-name");
         Optional<MultiverseWorld> first = multiverseCore.getMVWorldManager().getMVWorlds().stream().filter(multiverseWorld -> multiverseWorld.getName().equals(endName)).findFirst();
         return first.get();
+    }
+
+    public void reload() {
+        closePlugin();
+        loadPlugin();
     }
 }
