@@ -3,7 +3,7 @@ version: 1.0-SNAPSHOT
 main: me.kingtux.secondend.SecondEnd
 api-version: 1.16
 authors: [ KingTux ]
-depend: [ Multiverse-Core ]
+softdepend:  [ Multiverse-Core ]
 description: Generates and resets a secondary end
 commands:
   secondend:
