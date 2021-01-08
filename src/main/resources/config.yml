@@ -8,3 +8,5 @@ end-seed: ""
 return-world: "world"
 # Requires the player to already of found and entered the end portal found in the world.
 require-portal-achievement: false
+# Do you want to regenerate on plugin start
+regen-on-start: true
