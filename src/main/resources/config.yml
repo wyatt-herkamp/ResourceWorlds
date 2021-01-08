@@ -10,3 +10,5 @@ return-world: "world"
 require-portal-achievement: false
 # Do you want to regenerate on plugin start
 regen-on-start: true
+#Force the game to use the Bukkit World API over multiverse. If Multiverse is not installed ignore this.
+force-bukkit-api: false

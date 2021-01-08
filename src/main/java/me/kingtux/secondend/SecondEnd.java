@@ -23,17 +23,22 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
 
     @Override
     public void onEnable() {
-        try {
-            Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
-            SEWorldManager = new MultiverseSEWorldManager(this);
-        } catch (ClassNotFoundException e) {
+        saveDefaultConfig();
+        if (getConfig().getBoolean("force-bukkit-api", false)) {
             SEWorldManager = new BukkitSEWorldManager(this);
-        } catch (UnknownDependencyException e) {
-            System.out.println("Multiverse not found! Defaulting to Bukkit world manager.");
-            SEWorldManager = new BukkitSEWorldManager(this);
+        }else{
+            try {
+                Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
+                SEWorldManager = new MultiverseSEWorldManager(this);
+            } catch (ClassNotFoundException e) {
+                SEWorldManager = new BukkitSEWorldManager(this);
+            } catch (UnknownDependencyException e) {
+                System.out.println("Multiverse not found! Defaulting to Bukkit world manager.");
+                SEWorldManager = new BukkitSEWorldManager(this);
+            }
         }
 
-        saveDefaultConfig();
+
         loadPlugin();
         SecondEndCommand endCommand = new SecondEndCommand(this);
 
