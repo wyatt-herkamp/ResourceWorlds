@@ -4,6 +4,7 @@ import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import me.kingtux.enumconfig.BukkitYamlHandler;
 import me.kingtux.enumconfig.EnumConfigLoader;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -39,6 +40,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
 
         Bukkit.getPluginCommand("secondend").setExecutor(endCommand);
         Bukkit.getPluginCommand("secondend").setTabCompleter(endCommand);
+        Metrics metrics = new Metrics(this, 9932);
     }
 
     private void loadPlugin() {
