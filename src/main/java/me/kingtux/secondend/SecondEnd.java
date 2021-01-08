@@ -2,9 +2,9 @@ package me.kingtux.secondend;
 
 import me.kingtux.enumconfig.BukkitYamlHandler;
 import me.kingtux.enumconfig.EnumConfigLoader;
-import me.kingtux.secondend.worldmanager.BukkitWorldManager;
-import me.kingtux.secondend.worldmanager.MultiverseWorldManager;
-import me.kingtux.secondend.worldmanager.WorldManager;
+import me.kingtux.secondend.worldmanager.BukkitSEWorldManager;
+import me.kingtux.secondend.worldmanager.MultiverseSEWorldManager;
+import me.kingtux.secondend.worldmanager.SEWorldManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -17,7 +17,7 @@ import java.io.File;
 import java.util.Random;
 
 public final class SecondEnd extends JavaPlugin implements Runnable {
-    private WorldManager worldManager;
+    private SEWorldManager SEWorldManager;
     private final Random random = new Random();
     private int task;
 
@@ -25,12 +25,12 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     public void onEnable() {
         try {
             Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
-            worldManager = new MultiverseWorldManager(this);
+            SEWorldManager = new MultiverseSEWorldManager(this);
         } catch (ClassNotFoundException e) {
-            worldManager = new BukkitWorldManager(this);
+            SEWorldManager = new BukkitSEWorldManager(this);
         } catch (UnknownDependencyException e) {
             System.out.println("Multiverse not found! Defaulting to Bukkit world manager.");
-            worldManager = new BukkitWorldManager(this);
+            SEWorldManager = new BukkitSEWorldManager(this);
         }
 
         saveDefaultConfig();
@@ -50,7 +50,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
             //If it is set to regenOnStart delete it
             deleteWorld();
         }
-        if (!worldManager.worldExists(getConfig().getString("end-name"))) {
+        if (!SEWorldManager.worldExists(getConfig().getString("end-name"))) {
             createWorld();
         }
 
@@ -61,21 +61,21 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
 
     public void deleteWorld() {
         String endName = getConfig().getString("end-name");
-        if (worldManager.worldExists(endName)) {
+        if (SEWorldManager.worldExists(endName)) {
             Bukkit.broadcastMessage(SELang.RESETTING_END_ANNOUNCEMENT.color());
-            World world = worldManager.getWorld(endName);
+            World world = SEWorldManager.getWorld(endName);
             String returnWorldName = getConfig().getString("return-world", "world");
             if (returnWorldName == null) return;
             World returnWorld = Bukkit.getWorld(returnWorldName);
             if (returnWorld == null) return;
             for (Player player : world.getPlayers()) player.teleport(returnWorld.getSpawnLocation());
-            worldManager.deleteWorld(endName);
+            SEWorldManager.deleteWorld(endName);
         }
     }
 
     public World getSecondEndWorld() {
         String endName = getConfig().getString("end-name");
-        return worldManager.getWorld(endName);
+        return SEWorldManager.getWorld(endName);
     }
 
     public void createWorld() {
@@ -86,7 +86,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
             endSeed = String.valueOf(random.nextLong());
         }
 
-        worldManager.createWorld(endName, World.Environment.THE_END, endSeed, WorldType.NORMAL, true, null);
+        SEWorldManager.createWorld(endName, World.Environment.THE_END, endSeed, WorldType.NORMAL, true, null);
     }
 
     private void closePlugin() {
@@ -102,7 +102,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     @Override
     public void run() {
         String endName = getConfig().getString("end-name");
-        World world = worldManager.getWorld(endName);
+        World world = SEWorldManager.getWorld(endName);
         if (world != null) {
             deleteWorld();
         }

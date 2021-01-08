@@ -1,17 +1,17 @@
 package me.kingtux.secondend.worldmanager;
 
-import com.onarandombox.MultiverseCore.utils.FileUtils;
 import me.kingtux.secondend.SecondEnd;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.util.FileUtil;
 
 import java.io.File;
 
-public class BukkitWorldManager implements WorldManager {
+public class BukkitSEWorldManager implements SEWorldManager {
     private final SecondEnd secondEnd;
 
-    public BukkitWorldManager(SecondEnd secondEnd) {
+    public BukkitSEWorldManager(SecondEnd secondEnd) {
         this.secondEnd = secondEnd;
     }
 
@@ -40,6 +40,11 @@ public class BukkitWorldManager implements WorldManager {
         creator.type(worldType);
         creator.generateStructures(structures);
         creator.generator(generator);
+        createWorld(creator);
+    }
+
+    @Override
+    public void createWorld(WorldCreator creator) {
         secondEnd.getServer().createWorld(creator);
     }
 
@@ -49,6 +54,6 @@ public class BukkitWorldManager implements WorldManager {
         if (world == null) return;
         File worldFolder = world.getWorldFolder();
         secondEnd.getServer().unloadWorld(world, false);
-        FileUtils.deleteFolder(worldFolder);
+        SEUtils.deleteFolder(worldFolder);
     }
 }

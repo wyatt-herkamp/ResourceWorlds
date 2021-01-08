@@ -5,15 +5,16 @@ import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
 import me.kingtux.secondend.SecondEnd;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.UnknownDependencyException;
 
-public class MultiverseWorldManager implements WorldManager {
+public class MultiverseSEWorldManager implements SEWorldManager {
     private final MVWorldManager mvWorldManager;
     private final SecondEnd secondEnd;
 
-    public MultiverseWorldManager(SecondEnd secondEnd) {
+    public MultiverseSEWorldManager(SecondEnd secondEnd) {
         this.secondEnd = secondEnd;
         this.mvWorldManager = getMVCoreInstance().getMVWorldManager();
     }
@@ -43,6 +44,12 @@ public class MultiverseWorldManager implements WorldManager {
     public void createWorld(String worldName, World.Environment environment,
                             String seed, WorldType worldType, boolean structures, String generator) {
         mvWorldManager.addWorld(worldName, environment, seed, worldType, structures, generator);
+    }
+
+    @Override
+    public void createWorld(WorldCreator creator) {
+        mvWorldManager.addWorld(creator.name(), creator.environment(), String.valueOf(creator.seed()), creator.type(), creator.generateStructures(), creator.generatorSettings());
+
     }
 
     @Override
