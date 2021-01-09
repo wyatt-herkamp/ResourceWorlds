@@ -1,4 +1,4 @@
-package me.kingtux.secondend;
+package me.kingtux.resourceworlds;
 
 import me.kingtux.enumconfig.EnumConfig;
 import me.kingtux.enumconfig.annotations.ConfigEntry;
@@ -7,28 +7,48 @@ import org.apache.commons.text.StringSubstitutor;
 import org.bukkit.ChatColor;
 
 import java.util.Map;
+
 //https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
 //Variables ${var}
-public enum SELang implements EnumConfig {
+public enum Locale implements EnumConfig {
+    /**
+     * Valid Params: permission
+     */
     @ConfigEntry
     MISSING_PERMISSION("You lack the permission to do that"),
     @ConfigEntry
     MUST_BE_PLAYER("You must be a player"),
     @ConfigEntry
-    RESETTING_END_ANNOUNCEMENT("Resetting the end"),
-    @ConfigEntry
-    TELEPORT_TO_END("Teleported you to the end"),
-    @ConfigEntry
-    RESETTING_END("Forcing a end reset"),
-    @ConfigEntry
     RELOADING_PLUGIN("Reloading the plugin"),
+    /**
+     * Valid Params: advancement
+     */
     @ConfigEntry
-    MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal");
+    MUST_OF_ALREADY_COMPLETED_ADVANCEMENT("You must of already completed achievement ${advancement}"),
+    /**
+     * Valid params: world
+     */
+    @ConfigEntry
+    RESETTING_WORLD("Resetting world: ${world}"),
+    @ConfigEntry
+    INVALID_WORLD("Invalid World"),
+    /**
+     * Valid Params: cost
+     */
+    @ConfigEntry
+    LACK_FUNDS("You lack funds to do that"),
+    @ConfigEntry
+    INVALID_COMMAND("Invalid Command"),
+    /**
+     * Valid Params: hint
+     */
+    @ConfigEntry
+    INVALID_COMMAND_WITH_HINT("Invalid Command Try: ${hint}");
 
     @ConfigValue
     private String value;
 
-    SELang(String value) {
+    Locale(String value) {
         this.value = value;
     }
 

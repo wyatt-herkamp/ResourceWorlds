@@ -1,14 +1,30 @@
-# In Seconds
-reset-time: 86400
-#Second End Name
-end-name: "end_two"
-#End Seed. Blank = Random Every time
-end-seed: ""
 #Where do we send the players if they are in the second_end during a reset
 return-world: "world"
-# Requires the player to already of found and entered the end portal found in the world.
-require-portal-achievement: false
-# Do you want to regenerate on plugin start
-regen-on-start: true
 #Force the game to use the Bukkit World API over multiverse. If Multiverse is not installed ignore this.
 force-bukkit-api: false
+#How often to check to see if a world is in need of a reset.  If your server is slower. Increase this number.
+reset-check-time: 3600
+worlds:
+  end_two:
+    name: "Secondary End"
+    seed: 0
+    generator: ""
+    reset-time: 86400
+    cost: 0
+    regenOnStart: false
+    generateStructures: true
+    worldType: "NORMAL"
+    environment: "THE_END"
+    # The command  to access the world
+    # Permission is resourceworlds.{config_key} so in this case end_two
+    command:
+      command: secondend
+      description: "Access the Second End"
+      aliases: [ se ]
+    properties:
+      # Requires ResourceWorldEssentials
+      allowWarps: false
+    requirements:
+      1:
+        class: me.kingtux.resourceworlds.requirements.AdvancementRequirement
+        advancement: "end/root"

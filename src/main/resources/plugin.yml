@@ -1,10 +1,11 @@
-name: SecondEnd
+name: ResourceWorlds
 version: 1.0-SNAPSHOT
-main: me.kingtux.secondend.SecondEnd
+main: me.kingtux.resourceworlds.ResourceWorlds
 api-version: 1.16
 authors: [ KingTux ]
-softdepend:  [ Multiverse-Core ]
+softdepend: [ Multiverse-Core, Vault ]
 description: Generates and resets a secondary end
 commands:
-  secondend:
+  resourceworlds:
     description: "Second End Central Command"
+    aliases: [ rw, rws ]

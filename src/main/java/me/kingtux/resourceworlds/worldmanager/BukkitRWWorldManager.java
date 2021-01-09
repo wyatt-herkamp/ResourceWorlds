@@ -1,28 +1,28 @@
-package me.kingtux.secondend.worldmanager;
+package me.kingtux.resourceworlds.worldmanager;
 
-import me.kingtux.secondend.SecondEnd;
+import me.kingtux.resourceworlds.RWUtils;
+import me.kingtux.resourceworlds.ResourceWorlds;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
-import org.bukkit.util.FileUtil;
 
 import java.io.File;
 
-public class BukkitSEWorldManager implements SEWorldManager {
-    private final SecondEnd secondEnd;
+public class BukkitRWWorldManager implements RWWorldManager {
+    private final ResourceWorlds resourceWorlds;
 
-    public BukkitSEWorldManager(SecondEnd secondEnd) {
-        this.secondEnd = secondEnd;
+    public BukkitRWWorldManager(ResourceWorlds resourceWorlds) {
+        this.resourceWorlds = resourceWorlds;
     }
 
     @Override
     public boolean worldExists(String worldName) {
-        return secondEnd.getServer().getWorld(worldName) != null;
+        return resourceWorlds.getServer().getWorld(worldName) != null;
     }
 
     @Override
     public World getWorld(String worldName) {
-        return secondEnd.getServer().getWorld(worldName);
+        return resourceWorlds.getServer().getWorld(worldName);
     }
 
     @Override
@@ -45,7 +45,7 @@ public class BukkitSEWorldManager implements SEWorldManager {
 
     @Override
     public void createWorld(WorldCreator creator) {
-        secondEnd.getServer().createWorld(creator);
+        resourceWorlds.getServer().createWorld(creator);
     }
 
     @Override
@@ -53,7 +53,12 @@ public class BukkitSEWorldManager implements SEWorldManager {
         World world = getWorld(worldName);
         if (world == null) return;
         File worldFolder = world.getWorldFolder();
-        secondEnd.getServer().unloadWorld(world, false);
-        SEUtils.deleteFolder(worldFolder);
+        resourceWorlds.getServer().unloadWorld(world, false);
+        RWUtils.deleteFolder(worldFolder);
+    }
+
+    @Override
+    public String getName() {
+        return "Bukkit";
     }
 }
