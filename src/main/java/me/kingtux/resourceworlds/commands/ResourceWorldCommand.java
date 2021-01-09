@@ -114,7 +114,7 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
             }
             for (ResourceWorld resourceWorld : resourceWorlds.getResourceWorlds()) {
                 if (sender.hasPermission(RWUtils.getWorldPermission(resourceWorld))) {
-                    strings.add(resourceWorld.getName());
+                    strings.add(resourceWorld.getID());
                 }
             }
         }
