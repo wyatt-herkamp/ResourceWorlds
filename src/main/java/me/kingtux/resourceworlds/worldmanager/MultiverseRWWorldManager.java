@@ -43,6 +43,9 @@ public class MultiverseRWWorldManager implements RWWorldManager {
     @Override
     public void createWorld(String worldName, World.Environment environment,
                             String seed, WorldType worldType, boolean structures, String generator) {
+        if(worldExists(worldName)){
+            return;
+        }
         mvWorldManager.addWorld(worldName, environment, seed, worldType, structures, generator);
     }
 
