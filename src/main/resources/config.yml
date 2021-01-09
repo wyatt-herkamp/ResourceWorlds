@@ -6,7 +6,7 @@ force-bukkit-api: false
 worlds:
   end_two:
     name: "end_two"
-    seed: ""
+    seed: 0
     generator: ""
     reset-time: 86400
     cost: 0

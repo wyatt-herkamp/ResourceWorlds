@@ -5,6 +5,8 @@ import me.kingtux.enumconfig.EnumConfigLoader;
 import me.kingtux.resourceworlds.commands.ResourceWorldCommand;
 import me.kingtux.resourceworlds.economy.RWEconomy;
 import me.kingtux.resourceworlds.economy.VaultRWEconomy;
+import me.kingtux.resourceworlds.requirements.RWRequirement;
+import me.kingtux.resourceworlds.requirements.RequirementUtils;
 import me.kingtux.resourceworlds.worldmanager.BukkitRWWorldManager;
 import me.kingtux.resourceworlds.worldmanager.MultiverseRWWorldManager;
 import me.kingtux.resourceworlds.worldmanager.RWWorldManager;
@@ -12,7 +14,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldType;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -22,27 +24,29 @@ import java.util.List;
 import java.util.Random;
 
 public final class ResourceWorlds extends JavaPlugin implements Runnable {
-    private RWWorldManager RWWorldManager;
+    private RWWorldManager rwWorldManager;
     private final Random random = new Random();
     private int task;
     private RWEconomy rwEconomy;
     private List<ResourceWorld> resourceWorlds;
+    private static ResourceWorlds instance;
 
     @Override
     public void onEnable() {
+        instance = this;
         saveDefaultConfig();
         if (getConfig().getBoolean("force-bukkit-api", false)) {
-            RWWorldManager = new BukkitRWWorldManager(this);
+            rwWorldManager = new BukkitRWWorldManager(this);
         } else {
 
             try {
                 Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
-                RWWorldManager = new MultiverseRWWorldManager(this);
+                rwWorldManager = new MultiverseRWWorldManager(this);
             } catch (ClassNotFoundException e) {
-                RWWorldManager = new BukkitRWWorldManager(this);
+                rwWorldManager = new BukkitRWWorldManager(this);
             } catch (UnknownDependencyException e) {
                 System.out.println("Multiverse not found! Defaulting to Bukkit world manager.");
-                RWWorldManager = new BukkitRWWorldManager(this);
+                rwWorldManager = new BukkitRWWorldManager(this);
             }
         }
         if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
@@ -70,49 +74,52 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
 
         reloadConfig();
         resourceWorlds = new ArrayList<>();
-        int time = getConfig().getInt("reset-time") * 20;
-        boolean regenOnStart = getConfig().getBoolean("regen-on-start");
-        if (regenOnStart) {
-            //If it is set to regenOnStart delete it
-            deleteWorld();
-        }
-        if (!RWWorldManager.worldExists(getConfig().getString("end-name"))) {
-            createWorld();
-        }
 
-        task = Bukkit.getScheduler().runTaskTimer(this, this, time, time).getTaskId();
+        ConfigurationSection worlds = getConfig().getConfigurationSection("worlds");
+        if (worlds == null) {
+            getLogger().warning("No Worlds Found");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+        for (String key : worlds.getKeys(false)) {
+            ConfigurationSection configurationSection = worlds.getConfigurationSection(key);
+            if (configurationSection == null) {
+                //WATT
+                continue;
+            }
+            resourceWorlds.add(loadWorld(configurationSection));
+        }
+        task = 0;// = Bukkit.getScheduler().runTaskTimer(this, this, time, time).getTaskId();
         BukkitYamlHandler yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
         EnumConfigLoader.loadLang(yamlHandler, Locale.class, true);
     }
 
-    public void deleteWorld() {
-        String endName = getConfig().getString("end-name");
-        if (RWWorldManager.worldExists(endName)) {
-            Bukkit.broadcastMessage(Locale.RESETTING_END_ANNOUNCEMENT.color());
-            World world = RWWorldManager.getWorld(endName);
-            String returnWorldName = getConfig().getString("return-world", "world");
-            if (returnWorldName == null) return;
-            World returnWorld = Bukkit.getWorld(returnWorldName);
-            if (returnWorld == null) return;
-            for (Player player : world.getPlayers()) player.teleport(returnWorld.getSpawnLocation());
-            RWWorldManager.deleteWorld(endName);
+    private ResourceWorld loadWorld(ConfigurationSection world) {
+        ResourceWorldBuilder builder = new ResourceWorldBuilder();
+        //Strings
+        builder.setName(world.getString("name"));
+        builder.setGenerator(world.getString("generator", ""));
+        //Bukkit Properties
+        builder.setWorldType(WorldType.valueOf(world.getString("worldType")));
+        builder.setEnvironment(World.Environment.valueOf(world.getString("environment")));
+        //Booleans
+        builder.setRegenOnStart(world.getBoolean("regenOnStart", false));
+        builder.setGenerateStructures(world.getBoolean("generateStructures", true));
+        //Ints
+        builder.setSeed(world.getLong("seed", 0));
+        builder.setResetTime(world.getInt("reset-time", 86400));
+        builder.setCost(world.getInt("cost", 0));
+        //Requirements
+        ConfigurationSection requirements = world.getConfigurationSection("requirements");
+        for (String key : requirements.getKeys(false)) {
+            ConfigurationSection requirement = requirements.getConfigurationSection(key);
+            RWRequirement requirement1 = RequirementUtils.buildRequirement(requirement);
+            if (requirement1 == null) {
+                //TODO do something better.
+                continue;
+            }
+            builder.addRequirement(requirement1);
         }
-    }
-
-    public World getSecondEndWorld() {
-        String endName = getConfig().getString("end-name");
-        return RWWorldManager.getWorld(endName);
-    }
-
-    public void createWorld() {
-        String endName = getConfig().getString("end-name");
-
-        String endSeed = getConfig().getString("end-seed");
-        if (endSeed == null || endSeed.isEmpty()) {
-            endSeed = String.valueOf(random.nextLong());
-        }
-
-        RWWorldManager.createWorld(endName, World.Environment.THE_END, endSeed, WorldType.NORMAL, true, null);
+        return builder.createResourceWorld();
     }
 
     private void closePlugin() {
@@ -127,16 +134,15 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
 
     @Override
     public void run() {
-        String endName = getConfig().getString("end-name");
-        World world = RWWorldManager.getWorld(endName);
-        if (world != null) {
-            deleteWorld();
-        }
-        createWorld();
+//TODO implement runMethod
     }
 
     public void reload() {
         closePlugin();
         loadPlugin();
+    }
+
+    public static ResourceWorlds getInstance() {
+        return instance;
     }
 }
