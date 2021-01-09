@@ -30,7 +30,7 @@ public class WorldRunnable implements Runnable {
         }
     }
 
-    private void createWorld(ResourceWorld world) {
+    public void createWorld(ResourceWorld world) {
         WorldCreator worldCreator = world.createCreator();
         resourceWorlds.getRwWorldManager().createWorld(worldCreator);
     }

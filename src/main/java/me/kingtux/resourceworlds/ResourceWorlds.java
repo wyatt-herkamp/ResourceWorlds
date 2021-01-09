@@ -96,6 +96,16 @@ public final class ResourceWorlds extends JavaPlugin {
         }
         loadCustomCommands();
         runnable = new WorldRunnable(this);
+        for (ResourceWorld resourceWorld : resourceWorlds) {
+            if (rwWorldManager.worldExists(resourceWorld.getName())) {
+                if (resourceWorld.isRegenOnStart()) {
+                    runnable.deleteWorld(resourceWorld);
+                    runnable.createWorld(resourceWorld);
+                }
+            } else {
+                rwWorldManager.createWorld(resourceWorld.createCreator());
+            }
+        }
         task = Bukkit.getScheduler().runTaskTimer(this, runnable, 0, getConfig().getInt("reset-check-time", 3600)).getTaskId();
         BukkitYamlHandler yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
         EnumConfigLoader.loadLang(yamlHandler, Locale.class, true);
@@ -107,10 +117,9 @@ public final class ResourceWorlds extends JavaPlugin {
             String permission = "resourceworlds.worlds" + resourceWorld.getPropertiesSection().getName();
             Permission p = new Permission(permission, "Gives access to teleport to ResourceWorld: " + resourceWorld.getName());
             Bukkit.getPluginManager().addPermission(p);
-            if (!resourceWorld.getPropertiesSection().isSet("command")) continue;
             ConfigurationSection command = resourceWorld.getPropertiesSection().getConfigurationSection("command");
             if (command == null) {
-                throw new IllegalArgumentException("Emtpy Command Config Section");
+                continue;
             }
             CustomRWCommand customRWCommand = new CustomRWCommand(command, resourceWorld);
             customRWCommands.add(customRWCommand);
@@ -120,7 +129,7 @@ public final class ResourceWorlds extends JavaPlugin {
             return;
         }
         customRWCommands.forEach(customRWCommand -> {
-            map.register(customRWCommand.getName(), customRWCommand);
+            map.register(getName(), customRWCommand);
         });
     }
 
@@ -150,7 +159,7 @@ public final class ResourceWorlds extends JavaPlugin {
             }
             builder.addRequirement(requirement1);
         }
-        builder.setProperties(world.getConfigurationSection("properties"));
+        builder.setProperties(world);
         return builder.createResourceWorld();
     }
 

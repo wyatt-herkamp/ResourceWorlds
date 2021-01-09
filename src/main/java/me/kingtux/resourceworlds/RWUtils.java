@@ -1,5 +1,6 @@
 package me.kingtux.resourceworlds;
 
+import me.kingtux.resourceworlds.economy.RWEconomy;
 import me.kingtux.resourceworlds.events.ResourceWorldTeleportEvent;
 import me.kingtux.resourceworlds.requirements.RWRequirement;
 import org.bukkit.Bukkit;
@@ -57,11 +58,20 @@ public class RWUtils {
             return;
         }
         String permission = getWorldPermission(world);
-        if (player.hasPermission(permission)) {
-            player.sendMessage(Locale.MUST_BE_PLAYER.colorAndSubstitute(Map.of("permission", permission)));
+        if (!player.hasPermission(permission)) {
+            player.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission", permission)));
             return;
         }
+
         ResourceWorlds resourceWorlds = ResourceWorlds.getInstance();
+        if (resourceWorlds.getRwEconomy() != null && world.getCost() > 0) {
+            RWEconomy rwEconomy = resourceWorlds.getRwEconomy();
+            if (rwEconomy.getBalance(player) >= world.getCost()) {
+                player.sendMessage(Locale.LACK_FUNDS.colorAndSubstitute(Map.of("cost", String.valueOf(world.getCost()))));
+                return;
+            }
+            rwEconomy.withdrawPlayer(player, world.getCost());
+        }
         World world1 = resourceWorlds.getRwWorldManager().getWorld(world.getName());
         player.teleport(world1.getSpawnLocation());
     }

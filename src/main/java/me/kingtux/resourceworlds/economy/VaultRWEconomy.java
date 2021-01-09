@@ -15,14 +15,20 @@ public class VaultRWEconomy implements RWEconomy {
 
     public VaultRWEconomy() {
         RegisteredServiceProvider<Economy> rsp = Bukkit.getServicesManager().getRegistration(Economy.class);
-        if(rsp==null){
+        if (rsp == null) {
             throw new UnknownDependencyException("No Vault Econ implementation found.");
         }
         economy = rsp.getProvider();
+
     }
 
     @Override
     public void withdrawPlayer(OfflinePlayer offlinePlayer, double amount) {
         economy.withdrawPlayer(offlinePlayer, amount);
+    }
+
+    @Override
+    public double getBalance(OfflinePlayer player) {
+        return economy.getBalance(player);
     }
 }

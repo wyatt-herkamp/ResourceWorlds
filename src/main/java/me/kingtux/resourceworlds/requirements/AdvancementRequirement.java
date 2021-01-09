@@ -1,5 +1,6 @@
 package me.kingtux.resourceworlds.requirements;
 
+import me.kingtux.resourceworlds.Locale;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.advancement.Advancement;
@@ -19,6 +20,11 @@ public class AdvancementRequirement implements RWRequirement {
 
     @Override
     public boolean hasPlayerCompletedRequirement(Player player) {
-        return player.getAdvancementProgress(advancement).isDone();
+
+        boolean done = player.getAdvancementProgress(advancement).isDone();
+        if(!done){
+            player.sendMessage(Locale.MUST_OF_ENTERED_PORTAL.color());
+        }
+        return done;
     }
 }

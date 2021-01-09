@@ -7,6 +7,7 @@ import org.apache.commons.text.StringSubstitutor;
 import org.bukkit.ChatColor;
 
 import java.util.Map;
+
 //https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
 //Variables ${var}
 public enum Locale implements EnumConfig {
@@ -26,6 +27,8 @@ public enum Locale implements EnumConfig {
     MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal"),
     @ConfigEntry
     INVALID_WORLD("Invalid World"),
+    @ConfigEntry
+    LACK_FUNDS("You lack funds to do that"),
     @ConfigEntry
     INVALID_COMMAND("Invalid Command");
 

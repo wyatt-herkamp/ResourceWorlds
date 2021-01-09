@@ -4,6 +4,7 @@ import me.kingtux.resourceworlds.Locale;
 import me.kingtux.resourceworlds.RWUtils;
 import me.kingtux.resourceworlds.ResourceWorld;
 import me.kingtux.resourceworlds.ResourceWorlds;
+import me.kingtux.resourceworlds.events.ResourceWorldResetEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -43,9 +44,23 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
 
             if (args.length == 2) {
                 if (args[1].equalsIgnoreCase("all")) {
-                    resourceWorlds.getRunnable().run();
+                    for (ResourceWorld world : resourceWorlds.getResourceWorlds()) {
+                        ResourceWorldResetEvent resourceWorldResetEvent = new ResourceWorldResetEvent(world);
+                        Bukkit.getServer().getPluginManager().callEvent(resourceWorldResetEvent);
+                        resourceWorlds.getRunnable().deleteWorld(world);
+                        resourceWorlds.getRunnable().createWorld(world);
+                    }
+
                 } else {
-                    //TODO
+                    Optional<ResourceWorld> worldOptional = resourceWorlds.getWorld(args[0]);
+                    if (worldOptional.isEmpty()) {
+                        sender.sendMessage(Locale.INVALID_WORLD.color());
+                    }
+                    ResourceWorld world = worldOptional.get();
+                    ResourceWorldResetEvent resourceWorldResetEvent = new ResourceWorldResetEvent(world);
+                    Bukkit.getServer().getPluginManager().callEvent(resourceWorldResetEvent);
+                    resourceWorlds.getRunnable().deleteWorld(world);
+                    resourceWorlds.getRunnable().createWorld(world);
                 }
             } else {
                 sender.sendMessage("Invalid Command /rw reset {all,{WORLD_NAME}}");
@@ -59,10 +74,15 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
             sender.sendMessage(Locale.RELOADING_PLUGIN.color());
             resourceWorlds.reload();
         } else {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(Locale.MUST_BE_PLAYER.color());
+                return false;
+            }
             Optional<ResourceWorld> worldOptional = resourceWorlds.getWorld(args[0]);
             if (worldOptional.isEmpty()) {
                 sender.sendMessage(Locale.INVALID_WORLD.color());
             }
+
             ResourceWorld resourceWorld = worldOptional.get();
             RWUtils.teleportToWorld(((Player) sender), resourceWorld);
             return true;
@@ -76,17 +96,30 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String
             alias, @NotNull String[] args) {
         List<String> strings = new ArrayList<>();
-        if (sender.hasPermission("resourceworlds.reset")) {
-            strings.add("reset");
-        }
-        if (sender.hasPermission("resourceworlds.reload")) {
-            strings.add("reload");
-        }
-        for (ResourceWorld resourceWorld : resourceWorlds.getResourceWorlds()) {
-            if (sender.hasPermission(RWUtils.getWorldPermission(resourceWorld))) {
-                strings.add(resourceWorld.getName());
+
+        if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("reset")) {
+                strings.add("all");
+                for (ResourceWorld resourceWorld : resourceWorlds.getResourceWorlds()) {
+                    if (sender.hasPermission(RWUtils.getWorldPermission(resourceWorld))) {
+                        strings.add(resourceWorld.getName());
+                    }
+                }
+            }
+        } else {
+            if (sender.hasPermission("resourceworlds.reset")) {
+                strings.add("reset");
+            }
+            if (sender.hasPermission("resourceworlds.reload")) {
+                strings.add("reload");
+            }
+            for (ResourceWorld resourceWorld : resourceWorlds.getResourceWorlds()) {
+                if (sender.hasPermission(RWUtils.getWorldPermission(resourceWorld))) {
+                    strings.add(resourceWorld.getName());
+                }
             }
         }
         return strings;
+
     }
 }
