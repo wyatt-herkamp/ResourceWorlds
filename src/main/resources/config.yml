@@ -6,7 +6,7 @@ force-bukkit-api: false
 reset-check-time: 3600
 worlds:
   end_two:
-    name: "end_two"
+    name: "Secondary End"
     seed: 0
     generator: ""
     reset-time: 86400
@@ -20,7 +20,7 @@ worlds:
     command:
       command: secondend
       description: "Access the Second End"
-      aliases: [se]
+      aliases: [ se ]
     properties:
       # Requires ResourceWorldEssentials
       allowWarps: false

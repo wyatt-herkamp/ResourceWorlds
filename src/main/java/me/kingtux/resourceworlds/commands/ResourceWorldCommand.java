@@ -37,7 +37,7 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
         }
         if (args[0].equalsIgnoreCase("reset")) {
             if (!sender.hasPermission("resourceworlds.reset")) {
-                sender.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission","resourceworlds.reset")));
+                sender.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission", "resourceworlds.reset")));
                 return false;
             }
 
@@ -51,9 +51,10 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
                     }
 
                 } else {
-                    Optional<ResourceWorld> worldOptional = resourceWorlds.getWorld(args[0]);
+                    Optional<ResourceWorld> worldOptional = resourceWorlds.getWorld(args[1]);
                     if (worldOptional.isEmpty()) {
-                        sender.sendMessage(Locale.INVALID_WORLD.color());
+                        sender.sendMessage(Locale.INVALID_WORLD.colorAndSubstitute(Map.of("world", args[1])));
+                        return false;
                     }
                     ResourceWorld world = worldOptional.get();
                     ResourceWorldResetEvent resourceWorldResetEvent = new ResourceWorldResetEvent(world);
@@ -66,7 +67,7 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
             }
         } else if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("resourceworlds.reload")) {
-                sender.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission","resourceworlds.reload")));
+                sender.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission", "resourceworlds.reload")));
                 return false;
             }
             sender.sendMessage(Locale.RELOADING_PLUGIN.color());

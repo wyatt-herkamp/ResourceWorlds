@@ -81,6 +81,10 @@ public class ResourceWorld {
         return propertiesSection;
     }
 
+    public String getID() {
+        return propertiesSection.getName();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,7 +123,6 @@ public class ResourceWorld {
     }
 
     public WorldCreator createCreator() {
-
-        return WorldCreator.name(name).seed(seed).environment(environment).type(worldType).generator(generator).generateStructures(generateStructures);
+        return WorldCreator.name(getPropertiesSection().getName()).seed(seed).environment(environment).type(worldType).generator(generator).generateStructures(generateStructures);
     }
 }

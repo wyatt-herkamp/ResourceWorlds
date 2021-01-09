@@ -212,6 +212,11 @@ public final class ResourceWorlds extends JavaPlugin {
     }
 
     public Optional<ResourceWorld> getWorld(String arg) {
-        return resourceWorlds.stream().filter(resourceWorld -> resourceWorld.getName().equals(arg)).findFirst();
+        for (ResourceWorld resourceWorld : resourceWorlds) {
+            if (resourceWorld.getName().equalsIgnoreCase(arg) || resourceWorld.getID().equalsIgnoreCase(arg)) {
+                return Optional.of(resourceWorld);
+            }
+        }
+        return Optional.empty();
     }
 }
