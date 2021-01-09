@@ -9,12 +9,14 @@ public class ResourceWorld {
     private final int resetTime;
     private final List<RWRequirement> requirementsList;
     private final long seed;
+    private final int cost;
 
-    public ResourceWorld(String name, int resetTime, List<RWRequirement> requirementsList, long seed) {
+    public ResourceWorld(String name, int resetTime, List<RWRequirement> requirementsList, long seed, int cost) {
         this.name = name;
         this.resetTime = resetTime;
         this.requirementsList = requirementsList;
         this.seed = seed;
+        this.cost = cost;
     }
 
     public String getName() {
@@ -31,5 +33,9 @@ public class ResourceWorld {
 
     public long getSeed() {
         return seed;
+    }
+
+    public int getCost() {
+        return cost;
     }
 }

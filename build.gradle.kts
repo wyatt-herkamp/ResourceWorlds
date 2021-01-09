@@ -15,6 +15,8 @@ repositories {
     maven("https://repo.onarandombox.com/content/groups/public")
     maven("https://repo.potatocorp.dev/storages/maven/kingtux-repo")
     maven("https://repo.codemc.org/repository/maven-public")
+    maven("https://jitpack.io")
+
 }
 
 dependencies {
@@ -22,7 +24,8 @@ dependencies {
     compileOnly(group = "com.onarandombox.multiversecore", name = "Multiverse-Core", version = "4.2.2")
     implementation(group = "me.kingtux", name = "enumconfig", version = "1.0")
     implementation("org.bstats:bstats-bukkit:1.8")
-    implementation(group = "org.apache.commons", name= "commons-text", version="1.9")
+    implementation(group = "org.apache.commons", name = "commons-text", version = "1.9")
+    implementation("com.github.MilkBowl:VaultAPI:1.7")
 }
 tasks {
     "shadowJar"(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class) {

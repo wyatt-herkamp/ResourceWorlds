@@ -3,6 +3,8 @@ package me.kingtux.resourceworlds;
 import me.kingtux.enumconfig.BukkitYamlHandler;
 import me.kingtux.enumconfig.EnumConfigLoader;
 import me.kingtux.resourceworlds.commands.ResourceWorldCommand;
+import me.kingtux.resourceworlds.economy.RWEconomy;
+import me.kingtux.resourceworlds.economy.VaultRWEconomy;
 import me.kingtux.resourceworlds.worldmanager.BukkitRWWorldManager;
 import me.kingtux.resourceworlds.worldmanager.MultiverseRWWorldManager;
 import me.kingtux.resourceworlds.worldmanager.RWWorldManager;
@@ -21,13 +23,14 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
     private RWWorldManager RWWorldManager;
     private final Random random = new Random();
     private int task;
+    private RWEconomy rwEconomy;
 
     @Override
     public void onEnable() {
         saveDefaultConfig();
         if (getConfig().getBoolean("force-bukkit-api", false)) {
             RWWorldManager = new BukkitRWWorldManager(this);
-        }else{
+        } else {
 
             try {
                 Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
@@ -37,6 +40,17 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
             } catch (UnknownDependencyException e) {
                 System.out.println("Multiverse not found! Defaulting to Bukkit world manager.");
                 RWWorldManager = new BukkitRWWorldManager(this);
+            }
+        }
+        if (Bukkit.getPluginManager().isPluginEnabled("Vault")) {
+            try {
+                rwEconomy = new VaultRWEconomy();
+            } catch (Exception e) {
+                rwEconomy = null;
+                getLogger().warning("Vault was unable to initialize. Disabling Econ feature.");
+                if (getConfig().getBoolean("debug-mode", false)) {
+                    e.printStackTrace();
+                }
             }
         }
 
