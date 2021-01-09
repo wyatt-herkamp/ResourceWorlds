@@ -26,6 +26,7 @@ public class WorldRunnable implements Runnable {
                 Bukkit.getServer().getPluginManager().callEvent(resourceWorldResetEvent);
                 deleteWorld(resourceWorld);
                 createWorld(resourceWorld);
+                resourceWorld.setLastReset(currentTime);
             }
         }
     }
