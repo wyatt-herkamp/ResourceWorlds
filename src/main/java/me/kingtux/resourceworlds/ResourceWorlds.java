@@ -115,7 +115,7 @@ public final class ResourceWorlds extends JavaPlugin {
     private void loadCustomCommands() {
         customRWCommands = new ArrayList<>();
         for (ResourceWorld resourceWorld : resourceWorlds) {
-            String permission = "resourceworlds.worlds" + resourceWorld.getPropertiesSection().getName();
+            String permission = RWUtils.getWorldPermission(resourceWorld);
             Permission p = new Permission(permission, "Gives access to teleport to ResourceWorld: " + resourceWorld.getName());
             Bukkit.getPluginManager().addPermission(p);
             ConfigurationSection command = resourceWorld.getPropertiesSection().getConfigurationSection("command");

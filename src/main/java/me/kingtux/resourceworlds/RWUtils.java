@@ -45,7 +45,7 @@ public class RWUtils {
     }
 
     public static String getWorldPermission(ResourceWorld world) {
-        return "resourceworlds.worlds" + world.getPropertiesSection().getName();
+        return "resourceworlds.worlds." + world.getPropertiesSection().getName();
     }
 
     public static void teleportToWorld(Player player, ResourceWorld world) {
