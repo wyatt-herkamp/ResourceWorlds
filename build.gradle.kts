@@ -22,11 +22,12 @@ dependencies {
     compileOnly(group = "com.onarandombox.multiversecore", name = "Multiverse-Core", version = "4.2.2")
     implementation(group = "me.kingtux", name = "enumconfig", version = "1.0")
     implementation("org.bstats:bstats-bukkit:1.8")
+    implementation(group = "org.apache.commons", name= "commons-text", version="1.9")
 }
 tasks {
     "shadowJar"(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class) {
         dependencies {
-            relocate("org.bstats.bukkit","me.kingtux.secondend.bstats")
+            relocate("org.bstats.bukkit", "me.kingtux.secondend.bstats")
         }
     }
 }

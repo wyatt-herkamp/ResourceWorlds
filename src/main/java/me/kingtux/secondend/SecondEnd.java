@@ -27,6 +27,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
         if (getConfig().getBoolean("force-bukkit-api", false)) {
             SEWorldManager = new BukkitSEWorldManager(this);
         }else{
+
             try {
                 Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
                 SEWorldManager = new MultiverseSEWorldManager(this);
