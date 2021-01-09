@@ -22,10 +22,10 @@ repositories {
 dependencies {
     compileOnly("org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT")
     compileOnly(group = "com.onarandombox.multiversecore", name = "Multiverse-Core", version = "4.2.2")
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
     implementation(group = "me.kingtux", name = "enumconfig", version = "1.0")
     implementation("org.bstats:bstats-bukkit:1.8")
     implementation(group = "org.apache.commons", name = "commons-text", version = "1.9")
-    implementation("com.github.MilkBowl:VaultAPI:1.7")
 }
 tasks {
     "shadowJar"(com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar::class) {
