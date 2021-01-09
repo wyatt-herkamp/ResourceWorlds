@@ -39,4 +39,6 @@ public interface RWWorldManager {
      * @param worldName the world name
      */
     void deleteWorld(String worldName);
+
+    String getName();
 }

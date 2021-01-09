@@ -11,6 +11,9 @@ import java.util.Map;
 //https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
 //Variables ${var}
 public enum Locale implements EnumConfig {
+    /**
+     * Valid Params: permission
+     */
     @ConfigEntry
     MISSING_PERMISSION("You lack the permission to do that"),
     @ConfigEntry
@@ -27,6 +30,9 @@ public enum Locale implements EnumConfig {
     MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal"),
     @ConfigEntry
     INVALID_WORLD("Invalid World"),
+    /**
+     * Valid Params: cost
+     */
     @ConfigEntry
     LACK_FUNDS("You lack funds to do that"),
     @ConfigEntry

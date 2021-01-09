@@ -56,4 +56,9 @@ public class BukkitRWWorldManager implements RWWorldManager {
         resourceWorlds.getServer().unloadWorld(world, false);
         RWUtils.deleteFolder(worldFolder);
     }
+
+    @Override
+    public String getName() {
+        return "Bukkit";
+    }
 }

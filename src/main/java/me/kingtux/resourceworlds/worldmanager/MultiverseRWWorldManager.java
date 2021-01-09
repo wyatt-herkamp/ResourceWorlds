@@ -56,4 +56,9 @@ public class MultiverseRWWorldManager implements RWWorldManager {
     public void deleteWorld(String worldName) {
         if (worldExists(worldName)) mvWorldManager.deleteWorld(worldName);
     }
+
+    @Override
+    public String getName() {
+        return "Multiverse";
+    }
 }

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.concurrent.Callable;
 
 public final class ResourceWorlds extends JavaPlugin {
     private RWWorldManager rwWorldManager;
@@ -73,7 +74,8 @@ public final class ResourceWorlds extends JavaPlugin {
 
         Bukkit.getPluginCommand("resourceworlds").setExecutor(resourceWorldCommand);
         Bukkit.getPluginCommand("resourceworlds").setTabCompleter(resourceWorldCommand);
-        new Metrics(this, 9932);
+        Metrics metrics = new Metrics(this, 9951);
+        metrics.addCustomChart(new Metrics.SimplePie("worldmanager", () -> rwWorldManager.getName()));
     }
 
     private void loadPlugin() {
