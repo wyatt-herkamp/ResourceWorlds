@@ -17,6 +17,8 @@ import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public final class ResourceWorlds extends JavaPlugin implements Runnable {
@@ -24,6 +26,7 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
     private final Random random = new Random();
     private int task;
     private RWEconomy rwEconomy;
+    private List<ResourceWorld> resourceWorlds;
 
     @Override
     public void onEnable() {
@@ -64,7 +67,9 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
     }
 
     private void loadPlugin() {
+
         reloadConfig();
+        resourceWorlds = new ArrayList<>();
         int time = getConfig().getInt("reset-time") * 20;
         boolean regenOnStart = getConfig().getBoolean("regen-on-start");
         if (regenOnStart) {

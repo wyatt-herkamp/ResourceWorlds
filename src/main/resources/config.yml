@@ -1,14 +1,20 @@
-# In Seconds
-reset-time: 86400
-#Second End Name
-end-name: "end_two"
-#End Seed. Blank = Random Every time
-end-seed: ""
+
 #Where do we send the players if they are in the second_end during a reset
 return-world: "world"
-# Requires the player to already of found and entered the end portal found in the world.
-require-portal-achievement: false
-# Do you want to regenerate on plugin start
-regen-on-start: true
 #Force the game to use the Bukkit World API over multiverse. If Multiverse is not installed ignore this.
 force-bukkit-api: false
+worlds:
+  end_two:
+    name: "end_two"
+    seed: ""
+    generator: ""
+    reset-time: 86400
+    cost: 0
+    regenOnStart: false
+    generateStructures: true
+    worldType: "NORMAL"
+    environment: "THE_END"
+    requirements:
+      1:
+        class: me.kingtux.resourceworlds.requirements.AdvancementRequirement
+        advancement: "end/root"

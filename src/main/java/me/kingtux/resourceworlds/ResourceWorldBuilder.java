@@ -1,6 +1,8 @@
 package me.kingtux.resourceworlds;
 
 import me.kingtux.resourceworlds.requirements.RWRequirement;
+import org.bukkit.World;
+import org.bukkit.WorldType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,9 +10,14 @@ import java.util.List;
 public class ResourceWorldBuilder {
     private String name;
     private int resetTime;
-    private List<RWRequirement> requirementsList;
-    private long seed;
-    private int cost;
+    private List<RWRequirement> requirementsList = new ArrayList<>();
+    private long seed = 0;
+    private int cost = 0;
+    private boolean regenOnStart = false;
+    private boolean generateStructures = true;
+    private WorldType worldType;
+    private World.Environment environment;
+    private String generator = "";
 
     public ResourceWorldBuilder setName(String name) {
         this.name = name;
@@ -26,7 +33,6 @@ public class ResourceWorldBuilder {
         this.requirementsList = requirementsList;
         return this;
     }
-
     public ResourceWorldBuilder addRequirement(RWRequirement requirement) {
         if (requirementsList == null) requirementsList = new ArrayList<>();
         requirementsList.add(requirement);
@@ -43,7 +49,32 @@ public class ResourceWorldBuilder {
         return this;
     }
 
+    public ResourceWorldBuilder setRegenOnStart(boolean regenOnStart) {
+        this.regenOnStart = regenOnStart;
+        return this;
+    }
+
+    public ResourceWorldBuilder setGenerateStructures(boolean generateStructures) {
+        this.generateStructures = generateStructures;
+        return this;
+    }
+
+    public ResourceWorldBuilder setWorldType(WorldType worldType) {
+        this.worldType = worldType;
+        return this;
+    }
+
+    public ResourceWorldBuilder setEnvironment(World.Environment environment) {
+        this.environment = environment;
+        return this;
+    }
+
+    public ResourceWorldBuilder setGenerator(String generator) {
+        this.generator = generator;
+        return this;
+    }
+
     public ResourceWorld createResourceWorld() {
-        return new ResourceWorld(name, resetTime, requirementsList, seed, cost);
+        return new ResourceWorld(name, resetTime, requirementsList, seed, cost, regenOnStart, generateStructures, worldType, environment, generator);
     }
 }
