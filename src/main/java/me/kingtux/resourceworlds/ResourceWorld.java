@@ -2,6 +2,7 @@ package me.kingtux.resourceworlds;
 
 import me.kingtux.resourceworlds.requirements.RWRequirement;
 import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class ResourceWorld {
     private final WorldType worldType;
     private final World.Environment environment;
     private final String generator;
+    private long lastReset = System.currentTimeMillis();
 
     public ResourceWorld(String name, int resetTime, List<RWRequirement> requirementsList, long seed, int cost, boolean regenOnStart, boolean generateStructures, WorldType worldType, World.Environment environment, String generator) {
         this.name = name;
@@ -99,5 +101,18 @@ public class ResourceWorld {
                 ", environment=" + environment +
                 ", generator='" + generator + '\'' +
                 '}';
+    }
+
+    public long getLastReset() {
+        return lastReset;
+    }
+
+    public void setLastReset(long lastReset) {
+        this.lastReset = lastReset;
+    }
+
+    public WorldCreator createCreator() {
+
+        return WorldCreator.name(name).seed(seed).environment(environment).type(worldType).generator(generator).generateStructures(generateStructures);
     }
 }

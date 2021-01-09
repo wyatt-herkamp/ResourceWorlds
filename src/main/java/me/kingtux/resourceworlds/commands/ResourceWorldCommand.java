@@ -46,7 +46,7 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
                     return false;
                 }
             }
-            player.teleport(resourceWorlds.getSecondEndWorld().getSpawnLocation());
+            //player.teleport(resourceWorlds.getSecondEndWorld().getSpawnLocation());
             player.sendMessage(Locale.TELEPORT_TO_END.color());
             return true;
         }

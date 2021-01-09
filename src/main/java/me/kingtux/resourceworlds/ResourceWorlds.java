@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public final class ResourceWorlds extends JavaPlugin implements Runnable {
+public final class ResourceWorlds extends JavaPlugin {
     private RWWorldManager rwWorldManager;
     private final Random random = new Random();
     private int task;
@@ -88,7 +88,7 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
             }
             resourceWorlds.add(loadWorld(configurationSection));
         }
-        task = 0;// = Bukkit.getScheduler().runTaskTimer(this, this, time, time).getTaskId();
+        task = Bukkit.getScheduler().runTaskTimer(this, new WorldRunnable(this), 0, getConfig().getInt("reset-check-time", 3600)).getTaskId();
         BukkitYamlHandler yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
         EnumConfigLoader.loadLang(yamlHandler, Locale.class, true);
     }
@@ -124,7 +124,6 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
 
     private void closePlugin() {
         Bukkit.getScheduler().cancelTask(task);
-        String endName = getConfig().getString("end-name");
     }
 
     @Override
@@ -132,14 +131,22 @@ public final class ResourceWorlds extends JavaPlugin implements Runnable {
         closePlugin();
     }
 
-    @Override
-    public void run() {
-//TODO implement runMethod
-    }
 
     public void reload() {
         closePlugin();
         loadPlugin();
+    }
+
+    public RWWorldManager getRwWorldManager() {
+        return rwWorldManager;
+    }
+
+    public RWEconomy getRwEconomy() {
+        return rwEconomy;
+    }
+
+    public List<ResourceWorld> getResourceWorlds() {
+        return resourceWorlds;
     }
 
     public static ResourceWorlds getInstance() {

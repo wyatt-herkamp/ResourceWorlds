@@ -1,8 +1,9 @@
-
 #Where do we send the players if they are in the second_end during a reset
 return-world: "world"
 #Force the game to use the Bukkit World API over multiverse. If Multiverse is not installed ignore this.
 force-bukkit-api: false
+#How often to check to see if a world is in need of a reset.  If your server is slower. Increase this number.
+reset-check-time: 3600
 worlds:
   end_two:
     name: "end_two"
