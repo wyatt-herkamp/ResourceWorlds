@@ -1,4 +1,4 @@
-package me.kingtux.secondend.worldmanager;
+package me.kingtux.resourceworlds.worldmanager;
 
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -7,7 +7,7 @@ import org.bukkit.WorldType;
 /**
  * The World Manager for SecondEnd
  */
-public interface SEWorldManager {
+public interface RWWorldManager {
     /**
      * Does world exist.
      *

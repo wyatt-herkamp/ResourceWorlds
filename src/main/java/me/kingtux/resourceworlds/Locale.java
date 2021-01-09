@@ -1,4 +1,4 @@
-package me.kingtux.secondend;
+package me.kingtux.resourceworlds;
 
 import me.kingtux.enumconfig.EnumConfig;
 import me.kingtux.enumconfig.annotations.ConfigEntry;
@@ -9,7 +9,7 @@ import org.bukkit.ChatColor;
 import java.util.Map;
 //https://commons.apache.org/proper/commons-text/javadocs/api-release/org/apache/commons/text/StringSubstitutor.html
 //Variables ${var}
-public enum SELang implements EnumConfig {
+public enum Locale implements EnumConfig {
     @ConfigEntry
     MISSING_PERMISSION("You lack the permission to do that"),
     @ConfigEntry
@@ -28,7 +28,7 @@ public enum SELang implements EnumConfig {
     @ConfigValue
     private String value;
 
-    SELang(String value) {
+    Locale(String value) {
         this.value = value;
     }
 

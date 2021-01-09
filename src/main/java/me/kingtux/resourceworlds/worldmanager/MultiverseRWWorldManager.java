@@ -1,26 +1,26 @@
-package me.kingtux.secondend.worldmanager;
+package me.kingtux.resourceworlds.worldmanager;
 
 import com.onarandombox.MultiverseCore.MultiverseCore;
 import com.onarandombox.MultiverseCore.api.MVWorldManager;
 import com.onarandombox.MultiverseCore.api.MultiverseWorld;
-import me.kingtux.secondend.SecondEnd;
+import me.kingtux.resourceworlds.ResourceWorlds;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.UnknownDependencyException;
 
-public class MultiverseSEWorldManager implements SEWorldManager {
+public class MultiverseRWWorldManager implements RWWorldManager {
     private final MVWorldManager mvWorldManager;
-    private final SecondEnd secondEnd;
+    private final ResourceWorlds resourceWorlds;
 
-    public MultiverseSEWorldManager(SecondEnd secondEnd) {
-        this.secondEnd = secondEnd;
+    public MultiverseRWWorldManager(ResourceWorlds resourceWorlds) {
+        this.resourceWorlds = resourceWorlds;
         this.mvWorldManager = getMVCoreInstance().getMVWorldManager();
     }
 
     public MultiverseCore getMVCoreInstance() {
-        Plugin plugin = secondEnd.getServer().getPluginManager().getPlugin("Multiverse-Core");
+        Plugin plugin = resourceWorlds.getServer().getPluginManager().getPlugin("Multiverse-Core");
         if (plugin instanceof MultiverseCore) return (MultiverseCore) plugin;
 
         throw new UnknownDependencyException("Multiverse-Core");

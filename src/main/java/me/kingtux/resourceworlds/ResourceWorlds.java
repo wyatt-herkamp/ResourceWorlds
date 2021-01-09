@@ -1,10 +1,11 @@
-package me.kingtux.secondend;
+package me.kingtux.resourceworlds;
 
 import me.kingtux.enumconfig.BukkitYamlHandler;
 import me.kingtux.enumconfig.EnumConfigLoader;
-import me.kingtux.secondend.worldmanager.BukkitSEWorldManager;
-import me.kingtux.secondend.worldmanager.MultiverseSEWorldManager;
-import me.kingtux.secondend.worldmanager.SEWorldManager;
+import me.kingtux.resourceworlds.commands.ResourceWorldCommand;
+import me.kingtux.resourceworlds.worldmanager.BukkitRWWorldManager;
+import me.kingtux.resourceworlds.worldmanager.MultiverseRWWorldManager;
+import me.kingtux.resourceworlds.worldmanager.RWWorldManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -16,8 +17,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.util.Random;
 
-public final class SecondEnd extends JavaPlugin implements Runnable {
-    private SEWorldManager SEWorldManager;
+public final class ResourceWorlds extends JavaPlugin implements Runnable {
+    private RWWorldManager RWWorldManager;
     private final Random random = new Random();
     private int task;
 
@@ -25,26 +26,26 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     public void onEnable() {
         saveDefaultConfig();
         if (getConfig().getBoolean("force-bukkit-api", false)) {
-            SEWorldManager = new BukkitSEWorldManager(this);
+            RWWorldManager = new BukkitRWWorldManager(this);
         }else{
 
             try {
                 Class.forName("com.onarandombox.MultiverseCore.MultiverseCore");
-                SEWorldManager = new MultiverseSEWorldManager(this);
+                RWWorldManager = new MultiverseRWWorldManager(this);
             } catch (ClassNotFoundException e) {
-                SEWorldManager = new BukkitSEWorldManager(this);
+                RWWorldManager = new BukkitRWWorldManager(this);
             } catch (UnknownDependencyException e) {
                 System.out.println("Multiverse not found! Defaulting to Bukkit world manager.");
-                SEWorldManager = new BukkitSEWorldManager(this);
+                RWWorldManager = new BukkitRWWorldManager(this);
             }
         }
 
 
         loadPlugin();
-        SecondEndCommand endCommand = new SecondEndCommand(this);
+        ResourceWorldCommand resourceWorldCommand = new ResourceWorldCommand(this);
 
-        Bukkit.getPluginCommand("secondend").setExecutor(endCommand);
-        Bukkit.getPluginCommand("secondend").setTabCompleter(endCommand);
+        Bukkit.getPluginCommand("resourceworlds").setExecutor(resourceWorldCommand);
+        Bukkit.getPluginCommand("resourceworlds").setTabCompleter(resourceWorldCommand);
         new Metrics(this, 9932);
     }
 
@@ -56,32 +57,32 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
             //If it is set to regenOnStart delete it
             deleteWorld();
         }
-        if (!SEWorldManager.worldExists(getConfig().getString("end-name"))) {
+        if (!RWWorldManager.worldExists(getConfig().getString("end-name"))) {
             createWorld();
         }
 
         task = Bukkit.getScheduler().runTaskTimer(this, this, time, time).getTaskId();
         BukkitYamlHandler yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
-        EnumConfigLoader.loadLang(yamlHandler, SELang.class, true);
+        EnumConfigLoader.loadLang(yamlHandler, Locale.class, true);
     }
 
     public void deleteWorld() {
         String endName = getConfig().getString("end-name");
-        if (SEWorldManager.worldExists(endName)) {
-            Bukkit.broadcastMessage(SELang.RESETTING_END_ANNOUNCEMENT.color());
-            World world = SEWorldManager.getWorld(endName);
+        if (RWWorldManager.worldExists(endName)) {
+            Bukkit.broadcastMessage(Locale.RESETTING_END_ANNOUNCEMENT.color());
+            World world = RWWorldManager.getWorld(endName);
             String returnWorldName = getConfig().getString("return-world", "world");
             if (returnWorldName == null) return;
             World returnWorld = Bukkit.getWorld(returnWorldName);
             if (returnWorld == null) return;
             for (Player player : world.getPlayers()) player.teleport(returnWorld.getSpawnLocation());
-            SEWorldManager.deleteWorld(endName);
+            RWWorldManager.deleteWorld(endName);
         }
     }
 
     public World getSecondEndWorld() {
         String endName = getConfig().getString("end-name");
-        return SEWorldManager.getWorld(endName);
+        return RWWorldManager.getWorld(endName);
     }
 
     public void createWorld() {
@@ -92,7 +93,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
             endSeed = String.valueOf(random.nextLong());
         }
 
-        SEWorldManager.createWorld(endName, World.Environment.THE_END, endSeed, WorldType.NORMAL, true, null);
+        RWWorldManager.createWorld(endName, World.Environment.THE_END, endSeed, WorldType.NORMAL, true, null);
     }
 
     private void closePlugin() {
@@ -108,7 +109,7 @@ public final class SecondEnd extends JavaPlugin implements Runnable {
     @Override
     public void run() {
         String endName = getConfig().getString("end-name");
-        World world = SEWorldManager.getWorld(endName);
+        World world = RWWorldManager.getWorld(endName);
         if (world != null) {
             deleteWorld();
         }

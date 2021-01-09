@@ -1,8 +1,8 @@
-package me.kingtux.secondend.worldmanager;
+package me.kingtux.resourceworlds;
 
 import java.io.File;
 
-public class SEUtils {
+public class RWUtils {
     public static void deleteFolder(File folder) {
         File[] files = folder.listFiles();
         if (files != null) {

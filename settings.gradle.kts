@@ -1,1 +1,1 @@
-rootProject.name = "SecondEnd"
+rootProject.name = "ResourceWorlds"
