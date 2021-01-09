@@ -13,9 +13,8 @@ val artifactName = "ResourceWorlds"
 java {
     withJavadocJar()
     withSourcesJar()
-    targetCompatibility = org.gradle.api.JavaVersion.VERSION_1_8
-    sourceCompatibility = org.gradle.api.JavaVersion.VERSION_1_8
-
+    targetCompatibility = org.gradle.api.JavaVersion.VERSION_11
+    sourceCompatibility = org.gradle.api.JavaVersion.VERSION_11
 }
 repositories {
     mavenCentral()

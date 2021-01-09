@@ -23,7 +23,11 @@ public enum Locale implements EnumConfig {
     @ConfigEntry
     RELOADING_PLUGIN("Reloading the plugin"),
     @ConfigEntry
-    MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal");
+    MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal"),
+    @ConfigEntry
+    INVALID_WORLD("Invalid World"),
+    @ConfigEntry
+    INVALID_COMMAND("Invalid Command");
 
     @ConfigValue
     private String value;

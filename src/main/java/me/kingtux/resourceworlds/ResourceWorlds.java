@@ -15,13 +15,16 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldType;
+import org.bukkit.command.CommandMap;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 public final class ResourceWorlds extends JavaPlugin {
@@ -101,11 +104,24 @@ public final class ResourceWorlds extends JavaPlugin {
     private void loadCustomCommands() {
         customRWCommands = new ArrayList<>();
         for (ResourceWorld resourceWorld : resourceWorlds) {
+            String permission = "resourceworlds.worlds" + resourceWorld.getPropertiesSection().getName();
+            Permission p = new Permission(permission, "Gives access to teleport to ResourceWorld: " + resourceWorld.getName());
+            Bukkit.getPluginManager().addPermission(p);
             if (!resourceWorld.getPropertiesSection().isSet("command")) continue;
             ConfigurationSection command = resourceWorld.getPropertiesSection().getConfigurationSection("command");
-            CustomRWCommand customRWCommand = new CustomRWCommand(command);
+            if (command == null) {
+                throw new IllegalArgumentException("Emtpy Command Config Section");
+            }
+            CustomRWCommand customRWCommand = new CustomRWCommand(command, resourceWorld);
             customRWCommands.add(customRWCommand);
         }
+        CommandMap map = RWUtils.getCommandMap();
+        if (map == null) {
+            return;
+        }
+        customRWCommands.forEach(customRWCommand -> {
+            map.register(customRWCommand.getName(), customRWCommand);
+        });
     }
 
     private ResourceWorld loadWorld(ConfigurationSection world) {
@@ -140,6 +156,18 @@ public final class ResourceWorlds extends JavaPlugin {
 
     private void closePlugin() {
         Bukkit.getScheduler().cancelTask(task);
+        for (ResourceWorld resourceWorld : resourceWorlds) {
+            String permission = "resourceworlds.worlds" + resourceWorld.getPropertiesSection().getName();
+            Permission p = new Permission(permission, "Gives access to teleport to ResourceWorld: " + resourceWorld.getName());
+            Bukkit.getPluginManager().removePermission(p);
+        }
+        CommandMap map = RWUtils.getCommandMap();
+        if (map == null) {
+            return;
+        }
+        for (CustomRWCommand customRWCommand : customRWCommands) {
+            customRWCommand.unregister(map);
+        }
     }
 
     @Override
@@ -171,5 +199,9 @@ public final class ResourceWorlds extends JavaPlugin {
 
     public static ResourceWorlds getInstance() {
         return instance;
+    }
+
+    public Optional<ResourceWorld> getWorld(String arg) {
+        return resourceWorlds.stream().filter(resourceWorld -> resourceWorld.getName().equals(arg)).findFirst();
     }
 }
