@@ -51,6 +51,9 @@ public class MultiverseRWWorldManager implements RWWorldManager {
 
     @Override
     public void createWorld(WorldCreator creator) {
+        if(worldExists(creator.name())){
+            return;
+        }
         mvWorldManager.addWorld(creator.name(), creator.environment(), String.valueOf(creator.seed()), creator.type(), creator.generateStructures(), creator.generatorSettings());
 
     }
