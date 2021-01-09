@@ -17,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
@@ -25,7 +26,6 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
     public ResourceWorldCommand(ResourceWorlds resourceWorlds) {
         this.resourceWorlds = resourceWorlds;
         Bukkit.getPluginManager().addPermission(new Permission("resourceworlds.reload"));
-        Bukkit.getPluginManager().addPermission(new Permission("resourceworlds.use"));
         Bukkit.getPluginManager().addPermission(new Permission("resourceworlds.reset"));
     }
 
@@ -37,8 +37,7 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
         }
         if (args[0].equalsIgnoreCase("reset")) {
             if (!sender.hasPermission("resourceworlds.reset")) {
-                sender.sendMessage(Locale.MISSING_PERMISSION.color());
-
+                sender.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission","resourceworlds.reset")));
                 return false;
             }
 
@@ -63,12 +62,11 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
                     resourceWorlds.getRunnable().createWorld(world);
                 }
             } else {
-                sender.sendMessage("Invalid Command /rw reset {all,{WORLD_NAME}}");
+                sender.sendMessage(Locale.INVALID_COMMAND_WITH_HINT.colorAndSubstitute(Map.of("hint", "/rw reset {all,{WORLD_NAME}}")));
             }
-            sender.sendMessage(Locale.RESETTING_END.color());
         } else if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("resourceworlds.reload")) {
-                sender.sendMessage(Locale.MISSING_PERMISSION.color());
+                sender.sendMessage(Locale.MISSING_PERMISSION.colorAndSubstitute(Map.of("permission","resourceworlds.reload")));
                 return false;
             }
             sender.sendMessage(Locale.RELOADING_PLUGIN.color());

@@ -19,15 +19,17 @@ public enum Locale implements EnumConfig {
     @ConfigEntry
     MUST_BE_PLAYER("You must be a player"),
     @ConfigEntry
-    RESETTING_END_ANNOUNCEMENT("Resetting the end"),
-    @ConfigEntry
-    TELEPORT_TO_END("Teleported you to the end"),
-    @ConfigEntry
-    RESETTING_END("Forcing a end reset"),
-    @ConfigEntry
     RELOADING_PLUGIN("Reloading the plugin"),
+    /**
+     * Valid Params: advancement
+     */
     @ConfigEntry
-    MUST_OF_ENTERED_PORTAL("you must of already found and entered the end portal"),
+    MUST_OF_ALREADY_COMPLETED_ADVANCEMENT("You must of already completed achievement ${advancement}"),
+    /**
+     * Valid params: world
+     */
+    @ConfigEntry
+    RESETTING_WORLD("Resetting world: ${world}"),
     @ConfigEntry
     INVALID_WORLD("Invalid World"),
     /**
@@ -36,7 +38,12 @@ public enum Locale implements EnumConfig {
     @ConfigEntry
     LACK_FUNDS("You lack funds to do that"),
     @ConfigEntry
-    INVALID_COMMAND("Invalid Command");
+    INVALID_COMMAND("Invalid Command"),
+    /**
+     * Valid Params: hint
+     */
+    @ConfigEntry
+    INVALID_COMMAND_WITH_HINT("Invalid Command Try: ${hint}");
 
     @ConfigValue
     private String value;

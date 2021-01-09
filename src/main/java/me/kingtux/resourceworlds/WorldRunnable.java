@@ -38,7 +38,6 @@ public class WorldRunnable implements Runnable {
 
     public void deleteWorld(ResourceWorld world) {
         if (resourceWorlds.getRwWorldManager().worldExists(world.getName())) {
-            Bukkit.broadcastMessage(Locale.RESETTING_END_ANNOUNCEMENT.color());
             World bWorld = resourceWorlds.getRwWorldManager().getWorld(world.getName());
             String returnWorldName = resourceWorlds.getConfig().getString("return-world", "world");
             if (returnWorldName == null) return;

@@ -7,6 +7,8 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
+import java.util.Map;
+
 public class AdvancementRequirement implements RWRequirement {
     private Advancement advancement;
 
@@ -22,8 +24,8 @@ public class AdvancementRequirement implements RWRequirement {
     public boolean hasPlayerCompletedRequirement(Player player) {
 
         boolean done = player.getAdvancementProgress(advancement).isDone();
-        if(!done){
-            player.sendMessage(Locale.MUST_OF_ENTERED_PORTAL.color());
+        if (!done) {
+            player.sendMessage(Locale.MUST_OF_ALREADY_COMPLETED_ADVANCEMENT.colorAndSubstitute(Map.of("advancement", advancement.getKey().getKey())));
         }
         return done;
     }

@@ -6,6 +6,7 @@ import me.kingtux.resourceworlds.commands.CustomRWCommand;
 import me.kingtux.resourceworlds.commands.ResourceWorldCommand;
 import me.kingtux.resourceworlds.economy.RWEconomy;
 import me.kingtux.resourceworlds.economy.VaultRWEconomy;
+import me.kingtux.resourceworlds.listeners.SelfListener;
 import me.kingtux.resourceworlds.requirements.RWRequirement;
 import me.kingtux.resourceworlds.requirements.RequirementUtils;
 import me.kingtux.resourceworlds.worldmanager.BukkitRWWorldManager;
@@ -26,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.Callable;
 
 public final class ResourceWorlds extends JavaPlugin {
     private RWWorldManager rwWorldManager;
@@ -68,10 +68,9 @@ public final class ResourceWorlds extends JavaPlugin {
             }
         }
 
-
         loadPlugin();
         ResourceWorldCommand resourceWorldCommand = new ResourceWorldCommand(this);
-
+        Bukkit.getServer().getPluginManager().registerEvents(new SelfListener(), this);
         Bukkit.getPluginCommand("resourceworlds").setExecutor(resourceWorldCommand);
         Bukkit.getPluginCommand("resourceworlds").setTabCompleter(resourceWorldCommand);
         Metrics metrics = new Metrics(this, 9951);
