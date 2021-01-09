@@ -15,6 +15,12 @@ worlds:
     generateStructures: true
     worldType: "NORMAL"
     environment: "THE_END"
+    # The command  to access the world
+    # Permission is resourceworlds.{config_key} so in this case end_two
+    command:
+      command: secondend
+      description: "Access the Second End"
+      aliases: [se]
     properties:
       # Requires ResourceWorldEssentials
       allowWarps: false

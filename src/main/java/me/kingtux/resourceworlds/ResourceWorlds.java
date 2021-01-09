@@ -2,6 +2,7 @@ package me.kingtux.resourceworlds;
 
 import me.kingtux.enumconfig.BukkitYamlHandler;
 import me.kingtux.enumconfig.EnumConfigLoader;
+import me.kingtux.resourceworlds.commands.CustomRWCommand;
 import me.kingtux.resourceworlds.commands.ResourceWorldCommand;
 import me.kingtux.resourceworlds.economy.RWEconomy;
 import me.kingtux.resourceworlds.economy.VaultRWEconomy;
@@ -31,6 +32,7 @@ public final class ResourceWorlds extends JavaPlugin {
     private List<ResourceWorld> resourceWorlds;
     private static ResourceWorlds instance;
     private WorldRunnable runnable;
+    private List<CustomRWCommand> customRWCommands;
 
     @Override
     public void onEnable() {
@@ -89,10 +91,21 @@ public final class ResourceWorlds extends JavaPlugin {
             }
             resourceWorlds.add(loadWorld(configurationSection));
         }
+        loadCustomCommands();
         runnable = new WorldRunnable(this);
         task = Bukkit.getScheduler().runTaskTimer(this, runnable, 0, getConfig().getInt("reset-check-time", 3600)).getTaskId();
         BukkitYamlHandler yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
         EnumConfigLoader.loadLang(yamlHandler, Locale.class, true);
+    }
+
+    private void loadCustomCommands() {
+        customRWCommands = new ArrayList<>();
+        for (ResourceWorld resourceWorld : resourceWorlds) {
+            if (!resourceWorld.getPropertiesSection().isSet("command")) continue;
+            ConfigurationSection command = resourceWorld.getPropertiesSection().getConfigurationSection("command");
+            CustomRWCommand customRWCommand = new CustomRWCommand(command);
+            customRWCommands.add(customRWCommand);
+        }
     }
 
     private ResourceWorld loadWorld(ConfigurationSection world) {

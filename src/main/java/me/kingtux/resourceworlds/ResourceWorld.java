@@ -77,6 +77,10 @@ public class ResourceWorld {
         return generator;
     }
 
+    public ConfigurationSection getPropertiesSection() {
+        return propertiesSection;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
