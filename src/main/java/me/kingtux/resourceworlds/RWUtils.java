@@ -72,7 +72,7 @@ public class RWUtils {
             }
             rwEconomy.withdrawPlayer(player, world.getCost());
         }
-        World world1 = resourceWorlds.getRwWorldManager().getWorld(world.getName());
+        World world1 = resourceWorlds.getRwWorldManager().getWorld(world.getID());
         player.teleport(world1.getSpawnLocation());
     }
 }
