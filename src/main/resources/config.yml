@@ -15,6 +15,9 @@ worlds:
     generateStructures: true
     worldType: "NORMAL"
     environment: "THE_END"
+    properties:
+      # Requires ResourceWorldEssentials
+      allowWarps: false
     requirements:
       1:
         class: me.kingtux.resourceworlds.requirements.AdvancementRequirement

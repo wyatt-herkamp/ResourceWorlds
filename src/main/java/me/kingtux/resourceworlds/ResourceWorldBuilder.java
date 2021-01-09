@@ -3,6 +3,7 @@ package me.kingtux.resourceworlds;
 import me.kingtux.resourceworlds.requirements.RWRequirement;
 import org.bukkit.World;
 import org.bukkit.WorldType;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +19,7 @@ public class ResourceWorldBuilder {
     private WorldType worldType;
     private World.Environment environment;
     private String generator = "";
+    private ConfigurationSection propertiesSection;
 
     public ResourceWorldBuilder setName(String name) {
         this.name = name;
@@ -33,6 +35,7 @@ public class ResourceWorldBuilder {
         this.requirementsList = requirementsList;
         return this;
     }
+
     public ResourceWorldBuilder addRequirement(RWRequirement requirement) {
         if (requirementsList == null) requirementsList = new ArrayList<>();
         requirementsList.add(requirement);
@@ -69,12 +72,17 @@ public class ResourceWorldBuilder {
         return this;
     }
 
+    public ResourceWorldBuilder setProperties(ConfigurationSection configurationSection) {
+        this.propertiesSection = configurationSection;
+        return this;
+    }
+
     public ResourceWorldBuilder setGenerator(String generator) {
         this.generator = generator;
         return this;
     }
 
     public ResourceWorld createResourceWorld() {
-        return new ResourceWorld(name, resetTime, requirementsList, seed, cost, regenOnStart, generateStructures, worldType, environment, generator);
+        return new ResourceWorld(name, resetTime, requirementsList, seed, cost, regenOnStart, generateStructures, worldType, environment, generator, propertiesSection);
     }
 }

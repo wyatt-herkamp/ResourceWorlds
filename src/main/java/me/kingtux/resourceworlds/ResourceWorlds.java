@@ -121,6 +121,7 @@ public final class ResourceWorlds extends JavaPlugin {
             }
             builder.addRequirement(requirement1);
         }
+        builder.setProperties(world.getConfigurationSection("properties"));
         return builder.createResourceWorld();
     }
 

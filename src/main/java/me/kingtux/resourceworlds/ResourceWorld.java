@@ -4,6 +4,7 @@ import me.kingtux.resourceworlds.requirements.RWRequirement;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.WorldType;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.List;
 import java.util.Objects;
@@ -20,8 +21,9 @@ public class ResourceWorld {
     private final World.Environment environment;
     private final String generator;
     private long lastReset = System.currentTimeMillis();
+    private final ConfigurationSection propertiesSection;
 
-    public ResourceWorld(String name, int resetTime, List<RWRequirement> requirementsList, long seed, int cost, boolean regenOnStart, boolean generateStructures, WorldType worldType, World.Environment environment, String generator) {
+    public ResourceWorld(String name, int resetTime, List<RWRequirement> requirementsList, long seed, int cost, boolean regenOnStart, boolean generateStructures, WorldType worldType, World.Environment environment, String generator, ConfigurationSection propertiesSection) {
         this.name = name;
         this.resetTime = resetTime;
         this.requirementsList = requirementsList;
@@ -32,6 +34,7 @@ public class ResourceWorld {
         this.worldType = worldType;
         this.environment = environment;
         this.generator = generator;
+        this.propertiesSection = propertiesSection;
     }
 
     public String getName() {
