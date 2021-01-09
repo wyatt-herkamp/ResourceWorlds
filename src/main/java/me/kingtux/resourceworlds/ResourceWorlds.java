@@ -30,6 +30,7 @@ public final class ResourceWorlds extends JavaPlugin {
     private RWEconomy rwEconomy;
     private List<ResourceWorld> resourceWorlds;
     private static ResourceWorlds instance;
+    private WorldRunnable runnable;
 
     @Override
     public void onEnable() {
@@ -88,7 +89,8 @@ public final class ResourceWorlds extends JavaPlugin {
             }
             resourceWorlds.add(loadWorld(configurationSection));
         }
-        task = Bukkit.getScheduler().runTaskTimer(this, new WorldRunnable(this), 0, getConfig().getInt("reset-check-time", 3600)).getTaskId();
+        runnable = new WorldRunnable(this);
+        task = Bukkit.getScheduler().runTaskTimer(this, runnable, 0, getConfig().getInt("reset-check-time", 3600)).getTaskId();
         BukkitYamlHandler yamlHandler = new BukkitYamlHandler(new File(getDataFolder(), "lang.yml"));
         EnumConfigLoader.loadLang(yamlHandler, Locale.class, true);
     }
@@ -147,6 +149,10 @@ public final class ResourceWorlds extends JavaPlugin {
 
     public List<ResourceWorld> getResourceWorlds() {
         return resourceWorlds;
+    }
+
+    public WorldRunnable getRunnable() {
+        return runnable;
     }
 
     public static ResourceWorlds getInstance() {

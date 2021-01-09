@@ -56,8 +56,17 @@ public class ResourceWorldCommand implements CommandExecutor, TabCompleter {
 
                 return false;
             }
+
+            if (args.length == 2) {
+                if (args[1].equalsIgnoreCase("all")) {
+                    resourceWorlds.getRunnable().run();
+                } else {
+                    //TODO
+                }
+            } else {
+                sender.sendMessage("Invalid Command /rw reset {all,{WORLD_NAME}}");
+            }
             sender.sendMessage(Locale.RESETTING_END.color());
-            resourceWorlds.run();
         }
         if (args[0].equalsIgnoreCase("reload")) {
             if (!sender.hasPermission("resourceworlds.reload")) {
