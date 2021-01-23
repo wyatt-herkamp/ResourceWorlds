@@ -8,6 +8,9 @@ plugins {
 
 group = "me.kingtux"
 version = "1.0-SNAPSHOT"
+if (hasProperty("buildNumber")) {
+    version = "1.0-" + properties.get("buildNumber") + "-SNAPSHOT";
+}
 val artifactName = "ResourceWorlds"
 
 java {

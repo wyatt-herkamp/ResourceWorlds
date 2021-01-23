@@ -1,5 +1,5 @@
 name: ResourceWorlds
-version: 1.0-SNAPSHOT
+version: ${version}
 main: me.kingtux.resourceworlds.ResourceWorlds
 api-version: 1.16
 authors: [ KingTux ]
