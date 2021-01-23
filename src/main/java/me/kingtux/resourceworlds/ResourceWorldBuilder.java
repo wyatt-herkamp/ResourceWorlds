@@ -18,7 +18,7 @@ public class ResourceWorldBuilder {
     private boolean generateStructures = true;
     private WorldType worldType;
     private World.Environment environment;
-    private String generator = "";
+    private String generator = null;
     private ConfigurationSection propertiesSection;
 
     public ResourceWorldBuilder setName(String name) {
@@ -78,7 +78,10 @@ public class ResourceWorldBuilder {
     }
 
     public ResourceWorldBuilder setGenerator(String generator) {
-        this.generator = generator;
+        if (generator.isEmpty() || generator.isBlank()) {
+            generator = null;
+        } else
+            this.generator = generator;
         return this;
     }
 

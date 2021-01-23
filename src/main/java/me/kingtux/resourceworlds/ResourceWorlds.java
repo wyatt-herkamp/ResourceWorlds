@@ -138,7 +138,7 @@ public final class ResourceWorlds extends JavaPlugin {
         ResourceWorldBuilder builder = new ResourceWorldBuilder();
         //Strings
         builder.setName(world.getString("name"));
-        builder.setGenerator(world.getString("generator", ""));
+        builder.setGenerator(world.getString("generator", null));
         //Bukkit Properties
         builder.setWorldType(WorldType.valueOf(world.getString("worldType")));
         builder.setEnvironment(World.Environment.valueOf(world.getString("environment")));

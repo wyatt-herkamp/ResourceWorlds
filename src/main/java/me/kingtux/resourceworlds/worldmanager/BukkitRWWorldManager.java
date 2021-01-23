@@ -39,7 +39,9 @@ public class BukkitRWWorldManager implements RWWorldManager {
         creator.seed(longSeed);
         creator.type(worldType);
         creator.generateStructures(structures);
-        creator.generator(generator);
+        if(!generator.isEmpty() || !generator.isBlank()){
+            creator.generator(generator);
+        }
         createWorld(creator);
     }
 
