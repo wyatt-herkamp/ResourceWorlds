@@ -123,7 +123,7 @@ public class ResourceWorld {
     }
 
     public WorldCreator createCreator() {
-        WorldCreator worldCreator = WorldCreator.name(getPropertiesSection().getName()).seed(seed).environment(environment).type(worldType).generateStructures(generateStructures);
+        WorldCreator worldCreator = WorldCreator.name(getID()).seed(seed).environment(environment).type(worldType).generateStructures(generateStructures);
         if (generator != null) {
             worldCreator = worldCreator.generator(generator);
         }

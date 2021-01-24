@@ -37,14 +37,14 @@ public class WorldRunnable implements Runnable {
     }
 
     public void deleteWorld(ResourceWorld world) {
-        if (resourceWorlds.getRwWorldManager().worldExists(world.getName())) {
-            World bWorld = resourceWorlds.getRwWorldManager().getWorld(world.getPropertiesSection().getName());
+        if (resourceWorlds.getRwWorldManager().worldExists(world.getID())) {
+            World bWorld = resourceWorlds.getRwWorldManager().getWorld(world.getID());
             String returnWorldName = resourceWorlds.getConfig().getString("return-world", "world");
             if (returnWorldName == null) return;
             World returnWorld = Bukkit.getWorld(returnWorldName);
             if (returnWorld == null) return;
             for (Player player : bWorld.getPlayers()) player.teleport(returnWorld.getSpawnLocation());
-            resourceWorlds.getRwWorldManager().deleteWorld(world.getName());
+            resourceWorlds.getRwWorldManager().deleteWorld(world.getID());
         }
     }
 }
